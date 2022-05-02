@@ -11,12 +11,20 @@ import java.util.Scanner;
 public class Application implements CommandLineRunner
 {
 	ArrayList<Utente> utenti = new ArrayList<>();
+	ArrayList<Albero> alberi = new ArrayList<>();
 	public static void main(String[] args) {
 			SpringApplication.run(Application.class, args);
 		}
 	@Override
 	public void run(String... args) throws Exception
 	{
+		alberi.add( new Albero("01", "pino", 20.15));
+		alberi.add( new Albero("02", "abete", 40.00));
+		alberi.add( new Albero("03", "ciliegio", 06.45));
+		alberi.add( new Albero("04", "quercia", 19.99));
+		alberi.add( new Albero("05", "leccio", 15.80));
+
+
 		int scelta = 0;
 		while (scelta != 999)
 		{
@@ -26,7 +34,7 @@ public class Application implements CommandLineRunner
 			System.out.println("999 -> esci");
 			System.out.println(" ");
 			Scanner scanner = new Scanner(System.in);
-			System.out.println(" -> ");
+			System.out.print("-> ");
 			scelta = scanner.nextInt();
 			switch (scelta)
 			{
@@ -43,7 +51,7 @@ public class Application implements CommandLineRunner
 					insertUtente(nome, cognome, cf);
 				break;
 				case 2:
-
+					stampaAlberi();
 				break;
 			}
 		}
@@ -71,5 +79,12 @@ public class Application implements CommandLineRunner
 			utenti.add( new Utente(nome, cognome, cf));
 		}
 		return result;
+	}
+	void stampaAlberi()
+	{
+		for (Albero item : alberi)
+		{
+			System.out.println("id albero: " + item.getId() + " " + "tipologia: " + item.getTipologia() + " " + "costo: " + item.getCosto() + "€");
+		}
 	}
 }
