@@ -31,6 +31,7 @@ public class Application implements CommandLineRunner
 			System.out.println(" ");
 			System.out.println("1 -> inserisci utente");
 			System.out.println("2 -> visualizza tutti gli alberi");
+			System.out.println("3 -> visualizza tutti gli utenti");
 			System.out.println("999 -> esci");
 			System.out.println(" ");
 			Scanner scanner = new Scanner(System.in);
@@ -39,19 +40,22 @@ public class Application implements CommandLineRunner
 			switch (scelta)
 			{
 				case 1:
-					System.out.println("nome: ");
+					System.out.print("nome: ");
 					scanner = new Scanner(System.in);
 					String nome = scanner.nextLine();
-					System.out.println("cognome: ");
+					System.out.print("cognome: ");
 					scanner = new Scanner(System.in);
 					String cognome = scanner.nextLine();
-					System.out.println("codice fiscale: ");
+					System.out.print("codice fiscale: ");
 					scanner = new Scanner(System.in);
 					String cf = scanner.nextLine();
 					insertUtente(nome, cognome, cf);
 				break;
 				case 2:
 					stampaAlberi();
+				break;
+				case 3:
+					stampaUtenti();
 				break;
 			}
 		}
@@ -85,6 +89,13 @@ public class Application implements CommandLineRunner
 		for (Albero item : alberi)
 		{
 			System.out.println("id albero: " + item.getId() + " " + "tipologia: " + item.getTipologia() + " " + "costo: " + item.getCosto() + "€");
+		}
+	}
+	void stampaUtenti()
+	{
+		for (Utente item: utenti)
+		{
+			System.out.println("nome: " + item.getNome() + " " + "cognome: " + item.getCognome() + " " + "codice fiscale: " + item.getCf());
 		}
 	}
 }
