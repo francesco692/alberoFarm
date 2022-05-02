@@ -6,6 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SpringBootApplication
 public class Application implements CommandLineRunner
@@ -32,6 +34,7 @@ public class Application implements CommandLineRunner
 			System.out.println("1 -> inserisci utente");
 			System.out.println("2 -> visualizza tutti gli alberi");
 			System.out.println("3 -> visualizza tutti gli utenti");
+			System.out.println("4 -> ricerca albero per tipologia");
 			System.out.println("999 -> esci");
 			System.out.println(" ");
 			Scanner scanner = new Scanner(System.in);
@@ -56,6 +59,12 @@ public class Application implements CommandLineRunner
 				break;
 				case 3:
 					stampaUtenti();
+				break;
+				case 4:
+					System.out.print("tipologia -> ");
+					scanner = new Scanner(System.in);
+					String tipologia = scanner.nextLine();
+					findAlbero(tipologia);
 				break;
 			}
 		}
@@ -97,5 +106,11 @@ public class Application implements CommandLineRunner
 		{
 			System.out.println("nome: " + item.getNome() + " " + "cognome: " + item.getCognome() + " " + "codice fiscale: " + item.getCf());
 		}
+	}
+	void findAlbero (String tipologia)
+	{
+		Stream<Albero> alberoStream = alberi.stream();
+		ArrayList<Albero> tmp = (ArrayList<Albero>) alberoStream.filter(element -> element.getTipologia().equals(tipologia)).collect(Collectors.toList());
+		tmp.forEach(element -> System.out.println(element.getId() + " " + element.getTipologia() + " " + element.getCosto() + "€"));
 	}
 }
