@@ -4,6 +4,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -14,6 +15,7 @@ public class Application implements CommandLineRunner
 {
 	ArrayList<Utente> utenti = new ArrayList<>();
 	ArrayList<Albero> alberi = new ArrayList<>();
+	ArrayList<Acquisto> acquisti = new ArrayList<>();
 	public static void main(String[] args) {
 			SpringApplication.run(Application.class, args);
 		}
@@ -35,6 +37,7 @@ public class Application implements CommandLineRunner
 			System.out.println("2 -> visualizza tutti gli alberi");
 			System.out.println("3 -> visualizza tutti gli utenti");
 			System.out.println("4 -> ricerca albero per tipologia");
+			System.out.println("5 -> acquista un albero");
 			System.out.println("999 -> esci");
 			System.out.println(" ");
 			Scanner scanner = new Scanner(System.in);
@@ -65,6 +68,23 @@ public class Application implements CommandLineRunner
 					scanner = new Scanner(System.in);
 					String tipologia = scanner.nextLine();
 					findAlbero(tipologia);
+				break;
+				case 5:
+					System.out.print("id albero da acquistare: ");
+					scanner = new Scanner(System.in);
+					String idAlbero = scanner.nextLine();
+					System.out.print("codice fiscale dell'utente: ");
+					scanner = new Scanner(System.in);
+					String cfP = scanner.nextLine();
+					System.out.print("dai un nome al tuo albero: ");
+					scanner = new Scanner(System.in);
+					String nomeAlbero = scanner.nextLine();
+					System.out.print("scegli il luogo dove piantarlo: ");
+					scanner = new Scanner(System.in);
+					String posizione = scanner.nextLine();
+					System.out.print("data di acquisto: ");
+					LocalDate data = LocalDate.now();
+					acquistaAlbero(idAlbero, cfP, nomeAlbero, posizione, data);
 				break;
 			}
 		}
@@ -113,4 +133,60 @@ public class Application implements CommandLineRunner
 		ArrayList<Albero> tmp = (ArrayList<Albero>) alberoStream.filter(element -> element.getTipologia().equals(tipologia)).collect(Collectors.toList());
 		tmp.forEach(element -> System.out.println(element.getId() + " " + element.getTipologia() + " " + element.getCosto() + "€"));
 	}
+	boolean acquistaAlbero (String idAlbero, String cfP, String nomeAlbero, String posizione, LocalDate data)
+	{
+		boolean re = true;
+		boolean result1 = true;
+		for(Albero item: alberi)
+		{
+			if (item.getId().equals(idAlbero))
+			{
+				result1 = true;
+				break;
+			}
+			else
+			{
+				result1 = false;
+			}
+		}
+		boolean result2 = true;
+		for(Utente item1: utenti)
+		{
+			if (item1.getCf().equals(cfP))
+			{
+				result2 = true;
+				break;
+			}
+			else
+			{
+				result2 = false;
+			}
+		}
+		if (result1 && result2)
+		{
+			boolean result = true;
+			if (alberi.size() == 0)
+			{
+				acquisti.add( new Acquisto(idAlbero, cfP, nomeAlbero, posizione, data));
+				return result;
+			}
+			else
+			{
+				for (Acquisto item2: acquisti)
+				{
+					if(item2.getIdAlbero().equals(idAlbero))
+					{
+						result = false;
+					}
+				}
+			}
+			if(result)
+			{
+				acquisti.add( new Acquisto(idAlbero, cfP, nomeAlbero, posizione, data));
+			}
+			return result;
+		}
+		return re;
+	}
+
 }
