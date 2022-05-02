@@ -4,6 +4,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -82,9 +84,9 @@ public class Application implements CommandLineRunner
 					System.out.print("scegli il luogo dove piantarlo: ");
 					scanner = new Scanner(System.in);
 					String posizione = scanner.nextLine();
-					System.out.print("data di acquisto: ");
 					LocalDate data = LocalDate.now();
 					acquistaAlbero(idAlbero, cfP, nomeAlbero, posizione, data);
+					scriviFile();
 				break;
 			}
 		}
@@ -188,5 +190,22 @@ public class Application implements CommandLineRunner
 		}
 		return re;
 	}
-
+	void scriviFile()
+	{
+		try
+		{
+			FileWriter myWriter = new FileWriter("acquisto.txt");
+			for (Acquisto item: acquisti)
+			{
+				myWriter.write(item.getIdAlbero() + " " + item.getCfP() + " " + item.getNomeAlbero() + " " + item.getPosizione() + " " + item.getData());
+				myWriter.close();
+			}
+			System.out.println("Successfully wrote to the file.");
+		}
+		catch (IOException e)
+		{
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
+	}
 }
